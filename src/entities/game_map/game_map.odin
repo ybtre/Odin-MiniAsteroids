@@ -5,16 +5,19 @@ import "../../globals"
 import "../../entities"
 
 map_grid : entities.GameMap
+tex : ^rl.Texture2D
 
-setup :: proc() {
+setup :: proc(TEX : ^rl.Texture2D) {
     using globals
+
+    tex = TEX
 
     map_grid.spr.src = { 40, 0, SPRITE_SIZE, SPRITE_SIZE }
     map_grid.spr.dest = { MAP_OFFSET_X, MAP_OFFSET_Y, map_grid.spr.src.width * SPRITE_SCALE_MULTI, map_grid.spr.src.height * SPRITE_SCALE_MULTI }
     map_grid.spr.center = { map_grid.spr.src.width * SPRITE_SCALE_MULTI / 2, map_grid.spr.src.height * SPRITE_SCALE_MULTI / 2 }
 }
 
-render :: proc(game_atlas : rl.Texture2D){
+render :: proc(){
     using globals
 
     for x := 0; x < MAP_SIZE; x += 1 {
@@ -26,7 +29,7 @@ render :: proc(game_atlas : rl.Texture2D){
             map_grid.spr.dest.y += MAP_OFFSET_Y
 
             rl.DrawTexturePro(
-                game_atlas,
+                tex^,
                 map_grid.spr.src,
                 map_grid.spr.dest,
                 map_grid.spr.center,

@@ -5,14 +5,16 @@ import "../../globals"
 import entities "../../entities"
 
 mouse_cursor : entities.Cursor
+tex : ^rl.Texture2D
 
 get_pos :: proc() -> rl.Vector2 {
     return rl.Vector2{ mouse_cursor.spr.dest.x, mouse_cursor.spr.dest.y }
 }
 
-setup :: proc(){
+setup :: proc(game_atlas : ^rl.Texture2D){
     using globals
-    
+    tex = game_atlas
+
     rl.HideCursor()
 
     mouse_cursor.spr.src = { 104, 0, SPRITE_SIZE, SPRITE_SIZE }
@@ -32,9 +34,9 @@ update :: proc(){
     mouse_cursor.spr.dest.y = f32(rl.GetMouseY())
 }
 
-render :: proc(game_atlas : rl.Texture2D){
+render :: proc(){
     rl.DrawTexturePro(
-		game_atlas,
+		tex^,
 		mouse_cursor.spr.src,
 		mouse_cursor.spr.dest,
 		mouse_cursor.spr.center,
