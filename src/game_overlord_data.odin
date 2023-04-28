@@ -1,4 +1,4 @@
-package game_overlord
+package mini_asteroids
 
 import rl "vendor:raylib"
 

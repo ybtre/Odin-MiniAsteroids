@@ -1,20 +1,14 @@
-package cursor
+package mini_asteroids 
 
 import rl "vendor:raylib"
-import "../../globals"
-import entities "../../entities"
 
-mouse_cursor : entities.Cursor
-tex : ^rl.Texture2D
+mouse_cursor : Cursor
 
-get_pos :: proc() -> rl.Vector2 {
+get_cursor_pos  :: proc() -> rl.Vector2 {
     return rl.Vector2{ mouse_cursor.spr.dest.x, mouse_cursor.spr.dest.y }
 }
 
-setup :: proc(game_atlas : ^rl.Texture2D){
-    using globals
-    tex = game_atlas
-
+setup_cursor :: proc(){
     rl.HideCursor()
 
     mouse_cursor.spr.src = { 104, 0, SPRITE_SIZE, SPRITE_SIZE }
@@ -29,14 +23,14 @@ setup :: proc(game_atlas : ^rl.Texture2D){
     }
 }
 
-update :: proc(){
+update_cursor :: proc(){
     mouse_cursor.spr.dest.x = f32(rl.GetMouseX())
     mouse_cursor.spr.dest.y = f32(rl.GetMouseY())
 }
 
-render :: proc(){
+render_cursor :: proc(){
     rl.DrawTexturePro(
-		tex^,
+		game_atlas,
 		mouse_cursor.spr.src,
 		mouse_cursor.spr.dest,
 		mouse_cursor.spr.center,

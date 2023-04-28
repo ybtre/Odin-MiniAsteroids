@@ -1,4 +1,4 @@
-package globals
+package mini_asteroids 
 
 import rl "vendor:raylib"
 import m "core:math/linalg/hlsl"

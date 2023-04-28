@@ -1,3 +1,3 @@
-package screen_upgrade
+package mini_asteroids 
 
 import rl "vendor:raylib"

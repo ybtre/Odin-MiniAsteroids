@@ -1,23 +1,14 @@
-package asteroids
+package mini_asteroids 
 
 import rl "vendor:raylib"
-import "../../globals"
-import "../utils"
-import "../../entities"
-import "../../entities/player"
-import "../../engine/game_overlord"
 
-tex : ^rl.Texture2D
-
-asteroids : [globals.NUM_ASTEROIDS]entities.Asteroid
+asteroids : [NUM_ASTEROIDS]Asteroid
 asteroid_spawn_timer : f32
 
 asteroid_wave_spawner :: proc(){
-    using globals 
-
     asteroid_spawn_timer += rl.GetFrameTime()
 
-    if asteroid_spawn_timer >= game_overlord.get_current_wave_data().enemy_spawn_interval {
+    if asteroid_spawn_timer >= get_current_wave_data().enemy_spawn_interval {
         for i in 0..< NUM_ASTEROIDS {
             if !asteroids[i].ent.is_alive {
                 spawn_asteroid(&asteroids[i])
@@ -29,9 +20,7 @@ asteroid_wave_spawner :: proc(){
     }
 }
 
-spawn_asteroid :: proc( ASTEROID : ^entities.Asteroid){
-    using globals
-
+spawn_asteroid :: proc( ASTEROID : ^Asteroid){
     ASTEROID.ent.is_alive = false;
 
     ASTEROID.ent.rec = {
@@ -39,7 +28,8 @@ spawn_asteroid :: proc( ASTEROID : ^entities.Asteroid){
         f32(rl.GetRandomValue(MAP_OFFSET_X, MAP_OFFSET_X + (SPRITE_SIZE_SCALED * MAP_SIZE))),
         SPRITE_SIZE_SCALED, SPRITE_SIZE_SCALED,}
 
-    for rl.CheckCollisionCircleRec(rl.Vector2{player.p.ent.spr.dest.x, player.p.ent.spr.dest.y}, 250.0, ASTEROID.ent.rec)
+    // for rl.CheckCollisionCircleRec(rl.Vector2{player.p.ent.spr.dest.x, player.p.ent.spr.dest.y}, 250.0, ASTEROID.ent.rec)
+    for rl.CheckCollisionCircleRec(rl.Vector2{0,0}, 250.0, ASTEROID.ent.rec)
         {
             ASTEROID.ent.rec = {
                 f32(rl.GetRandomValue(MAP_OFFSET_X, MAP_OFFSET_X + (SPRITE_SIZE_SCALED * MAP_SIZE))),
@@ -69,9 +59,7 @@ spawn_asteroid :: proc( ASTEROID : ^entities.Asteroid){
         ASTEROID.ent.is_alive = true;
 }
 
-update :: proc() {
-    using globals
-
+update_asteroids :: proc() {
     for i in 0..<NUM_ASTEROIDS{
         if asteroids[i].ent.is_alive
         {
@@ -80,12 +68,11 @@ update :: proc() {
     }
 }
 
-move_asteroid :: proc( ASTEROID : ^entities.Asteroid) {
-    using globals
-
+move_asteroid :: proc( ASTEROID : ^Asteroid) {
     pos := rl.Vector2 { ASTEROID.ent.rec.x, ASTEROID.ent.rec.y };
-	target := rl.Vector2 { player.p.ent.rec.x, player.p.ent.rec.y };
-    pos = utils.vec2_move_towards(pos, target, rl.GetFrameTime() * ASTEROID.ent.speed)
+	// target := rl.Vector2 { player.p.ent.rec.x, player.p.ent.rec.y };
+    target := rl.Vector2 { 0,0 };
+    pos = vec2_move_towards(pos, target, rl.GetFrameTime() * ASTEROID.ent.speed)
 
 	ASTEROID.ent.rec.x = pos.x;
 	ASTEROID.ent.spr.dest.x = ASTEROID.ent.rec.x + SPRITE_OFFSET;
@@ -94,8 +81,6 @@ move_asteroid :: proc( ASTEROID : ^entities.Asteroid) {
 }
 
 reset_asteroids :: proc() {
-    using globals 
-
     for i in 0..<NUM_ASTEROIDS
     {
         if asteroids[i].ent.is_alive
@@ -105,16 +90,13 @@ reset_asteroids :: proc() {
     } 
 }
 
-destroy_asteroid :: proc(ASTEROID : ^entities.Asteroid) {
+destroy_asteroid :: proc(ASTEROID : ^Asteroid) {
     ASTEROID.ent.is_alive = false
     ASTEROID.ent.rec.x = -100
     ASTEROID.ent.rec.y = -100
 }
 
-setup :: proc( TEX : ^rl.Texture2D){
-    using globals
-    tex = TEX
-
+setup_asterpods :: proc() {
     for i in 0..< NUM_ASTEROIDS {
         asteroids[i].ent.is_alive = false
 
@@ -140,13 +122,11 @@ setup :: proc( TEX : ^rl.Texture2D){
     }
 }
 
-render :: proc() {
-    using globals  
-
+render_asteroids :: proc() {
     for i in 0..<NUM_ASTEROIDS{
 		if (asteroids[i].ent.is_alive) {
 			rl.DrawRectangleLinesEx(asteroids[i].ent.rec, 1, asteroids[i].ent.color);
-			rl.DrawTexturePro(tex^,
+			rl.DrawTexturePro(game_atlas,
 			               asteroids[i].ent.spr.src,
 			               asteroids[i].ent.spr.dest,
 			               asteroids[i].ent.spr.center,

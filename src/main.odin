@@ -1,4 +1,4 @@
-package game
+package mini_asteroids
 
 import fmt "core:fmt"
 import la "core:math/linalg"
@@ -6,31 +6,28 @@ import "core:strconv"
 import rl "vendor:raylib"
 import "core:strings"
 
-import "globals"
-import "engine"
-
 main :: proc() {
 
 	rl.SetRandomSeed(42)
 	
 	setup_window()
-	rl.InitWindow(i32(globals.SCREEN.x), i32(globals.SCREEN.y), strings.clone_to_cstring(globals.project_name))
+	rl.InitWindow(i32(SCREEN.x), i32(SCREEN.y), strings.clone_to_cstring(project_name))
 
-	engine.initialize()
+	initialize_engine()
 
 	is_running: bool = true;
 	for is_running && !rl.WindowShouldClose()
 	{
 		{// UPDATE
-			engine.update()			
+			update_engine()
 		}
 
 		{// RENDER
-			engine.render()
+			render_engine()
 		}
 	}
 
-	engine.shutdown()
+	shutdown_engine()
 
 	rl.CloseWindow()
 }

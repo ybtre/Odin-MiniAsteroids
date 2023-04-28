@@ -1,4 +1,4 @@
-package utils
+package mini_asteroids 
 
 import rl "vendor:raylib"
 import "core:math"

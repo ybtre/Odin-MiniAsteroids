@@ -1,17 +1,14 @@
-package game_overlord
+package mini_asteroids 
 
 import rl "vendor:raylib"
-import "../../globals"
 
-startup :: proc(){
+startup_game_overlord :: proc(){
     current_screen = SCREENS.MAIN_MENU
     score = 0
     is_paused = false
 }
 
 setup_game :: proc() {
-    using globals
-
     score = 0
 
     live_src = { 32, 0, SPRITE_SIZE, SPRITE_SIZE }

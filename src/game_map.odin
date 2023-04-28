@@ -1,25 +1,16 @@
-package game_map
+package mini_asteroids 
 
 import rl "vendor:raylib"
-import "../../globals"
-import "../../entities"
 
-map_grid : entities.GameMap
-tex : ^rl.Texture2D
+map_grid : GameMap
 
-setup :: proc(TEX : ^rl.Texture2D) {
-    using globals
-
-    tex = TEX
-
+setup_game_map :: proc() {
     map_grid.spr.src = { 40, 0, SPRITE_SIZE, SPRITE_SIZE }
     map_grid.spr.dest = { MAP_OFFSET_X, MAP_OFFSET_Y, map_grid.spr.src.width * SPRITE_SCALE_MULTI, map_grid.spr.src.height * SPRITE_SCALE_MULTI }
     map_grid.spr.center = { map_grid.spr.src.width * SPRITE_SCALE_MULTI / 2, map_grid.spr.src.height * SPRITE_SCALE_MULTI / 2 }
 }
 
-render :: proc(){
-    using globals
-
+render_game_map :: proc(){
     for x := 0; x < MAP_SIZE; x += 1 {
         for y := 0; y < MAP_SIZE; y += 1 
         {
@@ -29,7 +20,7 @@ render :: proc(){
             map_grid.spr.dest.y += MAP_OFFSET_Y
 
             rl.DrawTexturePro(
-                tex^,
+                game_atlas,
                 map_grid.spr.src,
                 map_grid.spr.dest,
                 map_grid.spr.center,
